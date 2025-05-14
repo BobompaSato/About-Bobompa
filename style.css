@@ -120,6 +120,18 @@ main {
   100% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
 }
 
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+/* フェードイン（表示時） */
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* フッター */
 footer {
   text-align: center;
