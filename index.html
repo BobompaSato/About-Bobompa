@@ -9,7 +9,7 @@
 <body>
   <!-- Hero セクション -->
   <section class="hero">
-    <h1 class="glitch big" data-text="ボボンパ佐藤">ボボンパ佐藤</h1>
+    <h1 id = "hero-text" class="glitch big" data-text="ボボンパ佐藤">ボボンパ佐藤</h1>
     <p class="scroll-hint">↓ スクロールして趣味を見る</p>
   </section>
 
@@ -34,6 +34,8 @@
   <footer>
     <p>&copy; 2025 ボボンパ佐藤</p>
   </footer>
+
+  //フェードイン効果
   <script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -47,6 +49,21 @@
 
   document.querySelectorAll('.fade-in').forEach(el => {
     observer.observe(el);
+  });
+
+  // Heroテキストのスクロール連動エフェクト
+  const heroText = document.getElementById("hero-text");
+
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    const maxScroll = window.innerHeight; // Heroの高さ＝100vh
+    const progress = Math.min(scrollY / maxScroll, 1);
+
+    const scale = 1 + progress * 1.5; // 1〜2.5倍に拡大
+    const opacity = 1 - progress;     // 1〜0に透明化
+
+    heroText.style.transform = `scale(${scale})`;
+    heroText.style.opacity = opacity;
   });
 </script>
 </body>
