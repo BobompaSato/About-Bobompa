@@ -1,146 +1,29 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css?family=Homenaje');
+
+.p-canvas-webgl {
+  position: fixed;
+  z-index: 1;
+  top: 0; left: 0;
 }
 
-body {
-  font-family: 'Helvetica', sans-serif;
-  line-height: 1.6;
-  background: #0f0f0f;
-  color: #f0f0f0;
-  scroll-behavior: smooth;
-}
-
-/* Hero セクション */
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #111;
-  text-align: center;
-}
-
-.hero h1 {
-  margin-bottom: 10px;
-}
-
-.big {
-  font-size: 3rem;
-}
-
-.scroll-hint {
-  color: #aaa;
-  font-size: 1rem;
-  animation: blink 1.5s infinite;
-}
-
-#hero-text {
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  will-change: transform, opacity;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* 趣味紹介セクション */
-main {
-  display: grid;
-  gap: 20px;
-  padding: 40px 20px;
-  background-color: #0f0f0f;
-}
-
-.hobby {
-  background: #1e1e1e;
-  padding: 20px;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* レスポンシブ対応 */
-@media (min-width: 600px) {
-  main {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 900px) {
-  main {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* グリッチエフェクト */
-.glitch {
-  font-weight: bold;
-  color: #fff;
-  position: relative;
-  display: inline-block;
-  text-transform: uppercase;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
+.p-summary {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  overflow: hidden;
-  color: #f0f;
-  clip: rect(0, 900px, 0, 0);
-}
-
-.glitch::before {
-  animation: glitchTop 2s infinite linear alternate-reverse;
-  color: #0ff;
-}
-
-.glitch::after {
-  animation: glitchBottom 2s infinite linear alternate-reverse;
-  color: #f0f;
-}
-
-@keyframes glitchTop {
-  0% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
-  10% { clip: rect(10px, 9999px, 50px, 0); transform: translate(-2px, -2px); }
-  20% { clip: rect(85px, 9999px, 140px, 0); transform: translate(2px, -1px); }
-  30% { clip: rect(20px, 9999px, 60px, 0); transform: translate(-1px, 1px); }
-  40% { clip: rect(50px, 9999px, 80px, 0); transform: translate(1px, -2px); }
-  100% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
-}
-
-@keyframes glitchBottom {
-  0% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
-  10% { clip: rect(60px, 9999px, 100px, 0); transform: translate(2px, 2px); }
-  20% { clip: rect(5px, 9999px, 30px, 0); transform: translate(-2px, 1px); }
-  30% { clip: rect(90px, 9999px, 120px, 0); transform: translate(1px, -1px); }
-  40% { clip: rect(30px, 9999px, 70px, 0); transform: translate(-1px, 2px); }
-  100% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
-}
-
-/* フェードイン（表示時） */
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* フッター */
-footer {
-  text-align: center;
-  padding: 20px 10px;
-  background: #1a1a1a;
+  top: 20px; left: 20px;
+  z-index: 2;
   color: #fff;
+  font-family: 'Homenaje', sans-serif;
+  h1 {
+    margin: 0 0 0.2em;
+    font-size: 42px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+  a {
+    color: #fff;
+  }
 }
