@@ -2,25 +2,24 @@ class BackgroundImage {
   constructor() {
     this.uniforms = {
       resolution: {
-        type: 'v2',
-        value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        type: "v2",
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
       },
       imageResolution: {
-        type: 'v2',
-        value: new THREE.Vector2(2048, 1356),
+        type: "v2",
+        value: new THREE.Vector2(2048, 1356)
       },
       texture: {
-        type: 't',
-        value: null,
-      },
+        type: "t",
+        value: null
+      }
     };
     this.obj = null;
   }
   init(src, callback) {
     const loader = new THREE.TextureLoader();
-    loader.crossOrigin = '*'; 
-    loader.load(
-      src, (tex) => {
+    loader.crossOrigin = "*";
+    loader.load(src, (tex) => {
       tex.magFilter = THREE.NearestFilter;
       tex.minFilter = THREE.NearestFilter;
       this.uniforms.texture.value = tex;
@@ -63,7 +62,7 @@ class BackgroundImage {
               );
             gl_FragColor = texture2D(texture, uv);
           }
-        `,
+        `
       })
     );
   }
@@ -76,17 +75,17 @@ class PostEffect {
   constructor(texture) {
     this.uniforms = {
       time: {
-        type: 'f',
+        type: "f",
         value: 0
       },
       resolution: {
-        type: 'v2',
+        type: "v2",
         value: new THREE.Vector2(window.innerWidth, window.innerHeight)
       },
       texture: {
-        type: 't',
-        value: texture,
-      },
+        type: "t",
+        value: texture
+      }
     };
     this.obj = this.createObj();
   }
@@ -267,7 +266,7 @@ class PostEffect {
           
             gl_FragColor = vec4(r, g, b, 1.0) * (1.0 - bnMask - bnMask2) + (whiteNoise + blockNoise + blockNoise2 - waveNoise);
           }
-        `,
+        `
       })
     );
   }
@@ -286,12 +285,12 @@ class ConsoleSignature {
     this.show();
   }
   show() {
-    if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+    if (navigator.userAgent.toLowerCase().indexOf("chrome") > -1) {
       const args = [
         `\n%c ${this.message} %c%c ${this.url} \n\n`,
-        'color: #fff; background: #222; padding:3px 0;',
-        'padding:3px 1px;',
-        'color: #fff; background: #47c; padding:3px 0;',
+        "color: #fff; background: #222; padding:3px 0;",
+        "padding:3px 1px;",
+        "color: #fff; background: #47c; padding:3px 0;"
       ];
       console.log.apply(console, args);
     } else if (window.console) {
@@ -302,24 +301,32 @@ class ConsoleSignature {
 
 const debounce = (callback, duration) => {
   var timer;
-  return function(event) {
+  return function (event) {
     clearTimeout(timer);
-    timer = setTimeout(function(){
+    timer = setTimeout(function () {
       callback(event);
     }, duration);
   };
 };
 
-const canvas = document.getElementById('canvas-webgl');
+const canvas = document.getElementById("canvas-webgl");
 const renderer = new THREE.WebGLRenderer({
   antialias: false,
-  canvas: canvas,
+  canvas: canvas
 });
-const renderBack1 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+const renderBack1 = new THREE.WebGLRenderTarget(
+  window.innerWidth,
+  window.innerHeight
+);
 const scene = new THREE.Scene();
 const sceneBack = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-const cameraBack = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+const cameraBack = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth / window.innerHeight,
+  1,
+  10000
+);
 const clock = new THREE.Clock();
 
 //
@@ -342,23 +349,27 @@ const resizeWindow = () => {
   postEffect.resize();
   renderBack1.setSize(window.innerWidth, window.innerHeight);
   renderer.setSize(window.innerWidth, window.innerHeight);
-}
+};
 const render = () => {
   const time = clock.getDelta();
   renderer.render(sceneBack, cameraBack, renderBack1);
   postEffect.render(time);
   renderer.render(scene, camera);
-}
+};
 const renderLoop = () => {
   render();
   requestAnimationFrame(renderLoop);
-}
+};
 
 const on = () => {
-  window.addEventListener('resize', debounce(() => {
-    resizeWindow();
-  }), 1000);
-}
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      resizeWindow();
+    }),
+    1000
+  );
+};
 
 const init = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -366,14 +377,14 @@ const init = () => {
   cameraBack.position.set(0, 0, 100);
   cameraBack.lookAt(new THREE.Vector3());
 
-  bgImg.init('http://www.tplh.net/file/osaka01.jpg', () => {
+  bgImg.init("http://www.tplh.net/file/osaka01.jpg", () => {
     sceneBack.add(bgImg.obj);
     scene.add(postEffect.obj);
-  })
+  });
 
   on();
   resizeWindow();
   renderLoop();
-}
+};
 init();
 
