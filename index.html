@@ -1,70 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ボボンパ佐藤のページ</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- Hero セクション -->
-  <section class="hero">
-    <h1 id = "hero-text" class="glitch big" data-text="ボボンパ佐藤">ボボンパ佐藤</h1>
-    <p class="scroll-hint">↓ スクロールして趣味を見る</p>
-  </section>
+<p class="p-summary">
+  <h1>GLSL Glitch</h1>
+  <p>
+    <a href="https://ykob.github.io/sketch-threejs/sketch/glitch.html" target="_blank">this source.</a>
+  </p>
+</p>
 
-  <!-- メイン趣味紹介 -->
-  <main>
-    <section class="hobby glitch　fade-in" data-text="🎸 ギター">
-      <h2>🎸 ギター</h2>
-      <p>休日はよくエレキギターでロックを弾いています。音作りにもこだわっています！</p>
-    </section>
-
-    <section class="hobby glitch fade-in" data-text="💪 筋トレ">
-      <h2>💪 筋トレ</h2>
-      <p>健康のためにジムで筋トレを続けています。ベンチプレスが好きです。</p>
-    </section>
-
-    <section class="hobby glitch fade-in" data-text="🎮 ゲーム">
-      <h2>🎮 ゲーム</h2>
-      <p>アクションゲームやホラーゲームが大好きで、YouTubeでも実況してます！</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 ボボンパ佐藤</p>
-  </footer>
-
-  //フェードイン効果
-  <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, {
-    threshold: 0.1
-  });
-
-  document.querySelectorAll('.fade-in').forEach(el => {
-    observer.observe(el);
-  });
-
-  // Heroテキストのスクロール連動エフェクト
-  const heroText = document.getElementById("hero-text");
-
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const maxScroll = window.innerHeight; // Heroの高さ＝100vh
-    const progress = Math.min(scrollY / maxScroll, 1);
-
-    const scale = 1 + progress * 1.5; // 1〜2.5倍に拡大
-    const opacity = 1 - progress;     // 1〜0に透明化
-
-    heroText.style.transform = `scale(${scale})`;
-    heroText.style.opacity = opacity;
-  });
-</script>
-</body>
-</html>
+<canvas id="canvas-webgl" class="p-canvas-webgl"></canvas>
