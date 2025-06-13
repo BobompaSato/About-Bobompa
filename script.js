@@ -352,9 +352,11 @@ const resizeWindow = () => {
 };
 const render = () => {
   const time = clock.getDelta();
-  renderer.render(sceneBack, cameraBack, renderBack1);
+  renderer.setRenderTarget(renderBack1); // まずレンダーターゲットを設定
+  renderer.render(sceneBack, cameraBack); // その後、シーンとカメラをレンダリング
   postEffect.render(time);
-  renderer.render(scene, camera);
+  renderer.setRenderTarget(null); // デフォルトのレンダーターゲット（画面）に戻す
+  renderer.render(scene, camera); // その後、ポストエフェクトシーンをレンダリング
 };
 const renderLoop = () => {
   render();
