@@ -1,14 +1,18 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden; /* 横方向のスクロールを禁止 */
   position: relative;
   width: 100%;
   height: 100%;
   background-color: #111;
   font-family: monospace;
+  /* スクロールを可能にするために、bodyのheightをコンテンツに合わせて伸ばす */
+  /* ただし、Three.jsキャンバスは常に画面いっぱいに表示し続ける */
+  min-height: 100vh; /* 少なくともビューポートの高さは確保 */
 }
 
+/* 既存のp-summaryのz-index調整 */
 .p-summary {
   position: absolute;
   top: 0;
@@ -18,8 +22,8 @@ html, body {
   box-sizing: border-box;
   color: #fff;
   font-size: 14px;
-  pointer-events: none; /* Allows clicks to pass through to the canvas */
-  z-index: 10;
+  pointer-events: none;
+  z-index: 10; /* Three.jsキャンバスより前面に */
 }
 
 .p-summary h1 {
@@ -36,14 +40,119 @@ html, body {
 .p-summary a {
   color: #0ff;
   text-decoration: none;
-  pointer-events: auto; /* Re-enable pointer events for the link itself */
+  pointer-events: auto;
 }
 
+/* Three.jsキャンバスのz-index調整 */
 .p-canvas-webgl {
-  position: absolute;
+  position: fixed; /* 画面に固定 */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   display: block;
+  z-index: 1; /* 最も背面に */
+}
+
+/* 追加するフッター（メニュー）のスタイル */
+.footer {
+  position: fixed; /* 画面下部に固定 */
+  bottom: -60px; /* 初期状態では画面外に隠す */
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px 0;
+  text-align: center;
+  transition: bottom 0.5s ease-out; /* スムーズな表示アニメーション */
+  z-index: 20; /* 最前面に */
+}
+
+.footer.is-shown {
+  bottom: 0; /* スクロール後に表示 */
+}
+
+.footer__inner ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* アイテム間のスペース */
+}
+
+.footer__inner ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.footer__inner ul li a:hover {
+  color: #0ff;
+  border-color: #0ff;
+}
+
+/* ポップアップ（モーダル）のスタイル */
+.popup-modal {
+  display: none; /* 初期状態では非表示 */
+  position: fixed;
+  z-index: 100; /* 最も最前面 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* コンテンツがはみ出したらスクロール可能に */
+  background-color: rgba(0, 0, 0, 0.8); /* 半透明の黒いオーバーレイ */
+  justify-content: center; /* 水平中央揃え */
+  align-items: center;   /* 垂直中央揃え */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.popup-modal.is-active {
+  display: flex; /* 表示状態 */
+}
+
+.popup-content {
+  background-color: #333;
+  color: #eee;
+  margin: auto; /* Flexboxでの中央配置をサポート */
+  padding: 30px;
+  border: 1px solid #888;
+  width: 80%; /* 幅を調整 */
+  max-width: 600px; /* 最大幅 */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: left;
+  line-height: 1.6;
+}
+
+.popup-content h2 {
+  color: #0ff;
+  margin-top: 0;
+  border-bottom: 2px solid #0ff;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.popup-content p {
+  margin-bottom: 15px;
+}
+
+.popup-content button {
+  background-color: #0ff;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.popup-content button:hover {
+  background-color: #099;
 }
