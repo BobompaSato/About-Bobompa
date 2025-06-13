@@ -18,7 +18,7 @@ class BackgroundImage {
   }
   init(src, callback) {
     const loader = new THREE.TextureLoader();
-    loader.crossOrigin = "*"; // This is important for handling images from other domains, though hosting locally is best for GitHub Pages
+    loader.crossOrigin = "*";
     loader.load(src, (tex) => {
       tex.magFilter = THREE.NearestFilter;
       tex.minFilter = THREE.NearestFilter;
@@ -116,17 +116,6 @@ class PostEffect {
             return fract(sin(dot(c.xy ,vec2(12.9898,78.233))) * 43758.5453);
           }
 
-          //
-          // Description : Array and textureless GLSL 2D/3D/4D simplex
-          //               noise functions.
-          //      Author : Ian McEwan, Ashima Arts.
-          //  Maintainer : ijm
-          //     Lastmod : 20110822 (ijm)
-          //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-          //               Distributed under the MIT License. See LICENSE file.
-          //               https://github.com/ashima/webgl-noise
-          //
-
           vec3 mod289(vec3 x) {
             return x - floor(x * (1.0 / 289.0)) * 289.0;
           }
@@ -149,40 +138,31 @@ class PostEffect {
             const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
             const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
-          // First corner
             vec3 i  = floor(v + dot(v, C.yyy) );
             vec3 x0 =   v - i + dot(i, C.xxx) ;
 
-          // Other corners
             vec3 g = step(x0.yzx, x0.xyz);
             vec3 l = 1.0 - g;
             vec3 i1 = min( g.xyz, l.zxy );
             vec3 i2 = max( g.xyz, l.zxy );
 
-            //   x0 = x0 - 0.0 + 0.0 * C.xxx;
-            //   x1 = x0 - i1  + 1.0 * C.xxx;
-            //   x2 = x0 - i2  + 2.0 * C.xxx;
-            //   x3 = x0 - 1.0 + 3.0 * C.xxx;
             vec3 x1 = x0 - i1 + C.xxx;
-            vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
-            vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+            vec3 x2 = x0 - i2 + C.yyy;
+            vec3 x3 = x0 - D.yyy;      
 
-          // Permutations
             i = mod289(i);
             vec4 p = permute( permute( permute(
                                 i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
                              + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
                              + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
 
-          // Gradients: 7x7 points over a square, mapped onto an octahedron.
-          // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
-            float n_ = 0.142857142857; // 1.0/7.0
+            float n_ = 0.142857142857;
             vec3  ns = n_ * D.wyz - D.xzx;
 
-            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
 
             vec4 x_ = floor(j * ns.z);
-            vec4 y_ = floor(j - 7.0 * x_ );  // mod(j,N)
+            vec4 y_ = floor(j - 7.0 * x_ );
 
             vec4 x = x_ *ns.x + ns.yyyy;
             vec4 y = y_ *ns.x + ns.yyyy;
@@ -191,8 +171,6 @@ class PostEffect {
             vec4 b0 = vec4( x.xy, y.xy );
             vec4 b1 = vec4( x.zw, y.zw );
 
-            //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
-            //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
             vec4 s0 = floor(b0)*2.0 + 1.0;
             vec4 s1 = floor(b1)*2.0 + 1.0;
             vec4 sh = -step(h, vec4(0.0));
@@ -205,14 +183,12 @@ class PostEffect {
             vec3 p2 = vec3(a1.xy,h.z);
             vec3 p3 = vec3(a1.zw,h.w);
 
-          //Normalise gradients
             vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
             p0 *= norm.x;
             p1 *= norm.y;
             p2 *= norm.z;
             p3 *= norm.w;
 
-          // Mix final noise value
             vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
             m = m * m;
             return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
@@ -329,6 +305,48 @@ const cameraBack = new THREE.PerspectiveCamera(
 );
 const clock = new THREE.Clock();
 
+// --- ここから追加・変更箇所 ---
+
+// DOM要素の取得
+const footer = document.querySelector('.footer');
+const aboutMeLink = document.getElementById('about-me-link');
+const popupModal = document.getElementById('popup-modal');
+const closePopupButton = document.getElementById('close-popup');
+
+let isFooterShown = false; // フッターが表示されているかどうかを追跡
+
+// スクロールイベントハンドラ
+const handleScroll = () => {
+  // スクロール量を取得 (縦方向)
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  // 画面の高さの約半分（または任意の閾値）スクロールしたらフッターを表示
+  const threshold = window.innerHeight * 0.5;
+
+  if (scrollY > threshold && !isFooterShown) {
+    footer.classList.add('is-shown');
+    isFooterShown = true;
+  } else if (scrollY <= threshold && isFooterShown) {
+    footer.classList.remove('is-shown');
+    isFooterShown = false;
+  }
+};
+
+// ポップアップ表示関数
+const showPopup = () => {
+  popupModal.classList.add('is-active');
+  document.body.style.overflow = 'hidden'; // 背景のスクロールを停止
+};
+
+// ポップアップ非表示関数
+const hidePopup = () => {
+  popupModal.classList.remove('is-active');
+  document.body.style.overflow = ''; // 背景のスクロールを元に戻す
+};
+
+// --- ここまで追加・変更箇所 ---
+
+
 //
 // process for this sketch.
 //
@@ -352,11 +370,14 @@ const resizeWindow = () => {
 };
 const render = () => {
   const time = clock.getDelta();
-  renderer.setRenderTarget(renderBack1); // まずレンダーターゲットを設定
-  renderer.render(sceneBack, cameraBack); // その後、シーンとカメラをレンダリング
+
+  renderer.setRenderTarget(renderBack1);
+  renderer.render(sceneBack, cameraBack);
+
   postEffect.render(time);
-  renderer.setRenderTarget(null); // デフォルトのレンダーターゲット（画面）に戻す
-  renderer.render(scene, camera); // その後、ポストエフェクトシーンをレンダリング
+
+  renderer.setRenderTarget(null);
+  renderer.render(scene, camera);
 };
 const renderLoop = () => {
   render();
@@ -368,8 +389,22 @@ const on = () => {
     "resize",
     debounce(() => {
       resizeWindow();
-    }, 1000) // Debounce duration added
+    }, 1000)
   );
+  
+  // --- ここからイベントリスナーの追加 ---
+  window.addEventListener('scroll', debounce(handleScroll, 200)); // スクロールイベント
+  aboutMeLink.addEventListener('click', (e) => {
+    e.preventDefault(); // デフォルトのリンク動作をキャンセル
+    showPopup();
+  });
+  closePopupButton.addEventListener('click', hidePopup); // ポップアップを閉じる
+  popupModal.addEventListener('click', (e) => { // オーバーレイクリックで閉じる
+    if (e.target === popupModal) {
+      hidePopup();
+    }
+  });
+  // --- ここまでイベントリスナーの追加 ---
 };
 
 const init = () => {
@@ -378,11 +413,7 @@ const init = () => {
   cameraBack.position.set(0, 0, 100);
   cameraBack.lookAt(new THREE.Vector3());
 
-  // === IMPORTANT: Change the image path here ===
-  // CORSの問題を避けるため、画像をダウンロードして
-  // リポジトリ内（例: 'assets'フォルダ）に配置し、
-  // このパスを適宜更新してください。
-  bgImg.init("./assets/b34b2c91a25dfcabf321737c03a21a02.jpg", () => {
+  bgImg.init("./assets/osaka01.jpg", () => {
     sceneBack.add(bgImg.obj);
     scene.add(postEffect.obj);
   });
