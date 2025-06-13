@@ -380,7 +380,7 @@ const init = () => {
   // CORSの問題を避けるため、画像をダウンロードして
   // リポジトリ内（例: 'assets'フォルダ）に配置し、
   // このパスを適宜更新してください。
-  bgImg.init("./assets/osaka01.jpg", () => {
+  bgImg.init("./assets/", () => {
     sceneBack.add(bgImg.obj);
     scene.add(postEffect.obj);
   });
