@@ -11,11 +11,32 @@
   <p class="p-summary">
     <h1>GLSL Glitch</h1>
     <p>
-      <a href="https://ykob.github.io/sketch-threejs/sketch/glitch.html" target="_blank">twitter</a>
+      <a href="https://ykob.github.io/sketch-threejs/sketch/glitch.html" target="_blank">this source.</a>
     </p>
   </p>
 
   <canvas id="canvas-webgl" class="p-canvas-webgl"></canvas>
+
+  <div class="footer">
+    <div class="footer__inner">
+      <ul>
+        <li><a href="#" id="about-me-link">ABOUT ME</a></li>
+        <li><a href="https://twitter.com/YOUR_TWITTER_ID" target="_blank" rel="noopener noreferrer">TWITTER</a></li>
+        <li><a href="https://www.instagram.com/YOUR_INSTAGRAM_ID/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
+        <li><a href="https://discord.gg/YOUR_DISCORD_INVITE" target="_blank" rel="noopener noreferrer">DISCORD</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="popup-modal" class="popup-modal">
+    <div class="popup-content">
+      <h2>ABOUT ME</h2>
+      <p>ここにあなたの自己紹介文を記述します。</p>
+      <p>例：こんにちは！私はウェブ開発者として、クリエイティブなThree.jsエフェクトやインタラクティブな体験を追求しています。このサイトでは、私のポートフォリオや興味のあるプロジェクトを紹介しています。</p>
+      <p>ご興味があれば、各SNSリンクからご連絡ください。</p>
+      <button id="close-popup">閉じる</button>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="script.js"></script>
