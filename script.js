@@ -413,7 +413,7 @@ const init = () => {
   cameraBack.position.set(0, 0, 100);
   cameraBack.lookAt(new THREE.Vector3());
 
-  bgImg.init("./assets/osaka01.jpg", () => {
+  bgImg.init("./assets/b34b2c91a25dfcabf321737c03a21a02.jpg", () => {
     sceneBack.add(bgImg.obj);
     scene.add(postEffect.obj);
   });
